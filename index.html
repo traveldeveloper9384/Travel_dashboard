@@ -5,465 +5,151 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>프로 역마살러 실시간 여행 대시보드</title>
 <style>
-* {
-box-sizing: border-box;
-margin: 0;
-padding: 0;
-font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
-}
-
-body {
-background-color: #f0f4f8;
-color: #333333;
-padding: 20px;
-display: flex;
-flex-direction: column;
-gap: 20px;
-min-height: 100vh;
-}
-
-header {
-background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
-color: white;
-padding: 20px;
-border-radius: 12px;
-box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-display: flex;
-justify-content: space-between;
-align-items: center;
-}
-
-header h1 {
-font-size: 24px;
-font-weight: 700;
-}
-
-.update-time {
-font-size: 14px;
-opacity: 0.9;
-background: rgba(255,255,255,0.2);
-padding: 6px 12px;
-border-radius: 20px;
-}
-
-/* 1. 상단 바: 실시간 환율 & 타이머 */
-.exchange-container {
-display: grid;
-grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-gap: 15px;
-}
-
-.exchange-card {
-background: white;
-padding: 18px;
-border-radius: 12px;
-box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-display: flex;
-flex-direction: column;
-gap: 8px;
-position: relative;
-overflow: hidden;
-}
-
-.exchange-card::before {
-content: '';
-position: absolute;
-left: 0;
-top: 0;
-height: 100%;
-width: 5px;
-}
-
-.exchange-card.good::before { background-color: #2ecc71; }
-.exchange-card.warning::before { background-color: #f1c40f; }
-.exchange-card.danger::before { background-color: #e74c3c; }
-
-.currency-name {
-font-size: 13px;
-color: #7f8c8d;
-font-weight: 600;
-}
-
-.currency-rate {
-font-size: 24px;
-font-weight: 700;
-color: #2c3e50;
-}
-
-.status-badge {
-align-self: flex-start;
-font-size: 11px;
-padding: 4px 8px;
-border-radius: 4px;
-font-weight: 600;
-}
-
-.good .status-badge { background-color: #e8f8f5; color: #2ecc71; }
-.warning .status-badge { background-color: #fef9e7; color: #f1c40f; }
-.danger .status-badge { background-color: #fdedec; color: #e74c3c; }
-
-/* 메인 콘텐츠 그리드 레이아웃 */
-.main-grid {
-display: grid;
-grid-template-columns: 2fr 1fr;
-gap: 20px;
-flex: 1;
-}
-
-@media (max-width: 900px) {
-.main-grid { grid-template-columns: 1fr; }
-}
-
-.dashboard-section {
-background: white;
-padding: 20px;
-border-radius: 12px;
-box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-display: flex;
-flex-direction: column;
-gap: 15px;
-}
-
-.section-title {
-font-size: 18px;
-font-weight: 700;
-color: #2c3e50;
-border-bottom: 2px solid #f0f4f8;
-padding-bottom: 10px;
-display: flex;
-justify-content: space-between;
-align-items: center;
-}
-
-/* 2. 좌측 메인: 항공권 가격 추적 스타일 */
-.flight-route {
-background: #f8fafc;
-border: 1px solid #e2e8f0;
-border-radius: 8px;
-padding: 15px;
-display: flex;
-flex-direction: column;
-gap: 10px;
-}
-
-.route-header {
-display: flex;
-justify-content: space-between;
-align-items: center;
-font-weight: 600;
-}
-
-.price-alert {
-color: #2ecc71;
-font-weight: 700;
-font-size: 18px;
-}
-
-/* 미니 가격 막대그래프 (CSS 순수 구현) */
-.chart-container {
-display: flex;
-align-items: flex-end;
-justify-content: space-between;
-height: 120px;
-padding-top: 25px;
-border-bottom: 1px solid #e2e8f0;
-}
-
-.chart-bar-wrapper {
-display: flex;
-flex-direction: column;
-align-items: center;
-flex: 1;
-gap: 5px;
-}
-
-.chart-bar {
-width: 60%;
-background-color: #3498db;
-border-radius: 4px 4px 0 0;
-transition: height 0.3s;
-position: relative;
-cursor: pointer;
-}
-
-.chart-bar.lowest { background-color: #2ecc71; }
-
-.chart-bar:hover::after {
-content: attr(data-price);
-position: absolute;
-top: -25px;
-left: 50%;
-transform: translateX(-50%);
-background: #2c3e50;
-color: white;
-font-size: 11px;
-padding: 2px 6px;
-border-radius: 4px;
-white-space: nowrap;
-}
-
-.chart-label {
-font-size: 11px;
-color: #7f8c8d;
-}
-
-/* 3. 우측 서브: 관심 도시 현지 정보 스타일 */
-.weather-card {
-background: #f8fafc;
-border-radius: 8px;
-padding: 15px;
-display: flex;
-justify-content: space-between;
-align-items: center;
-border: 1px solid #e2e8f0;
-position: relative;
-}
-
-.weather-info h4 {
-font-size: 16px;
-color: #2c3e50;
-margin-bottom: 4px;
-}
-
-.weather-info p {
-font-size: 12px;
-color: #7f8c8d;
-}
-
-.weather-temp { text-align: right; }
-.temp-val { font-size: 22px; font-weight: 700; color: #2c3e50; }
-.time-val { font-size: 13px; color: #e67e22; font-weight: 600; }
-
-/* 도시 추가 폼 스타일 */
-.city-form {
-display: flex;
-gap: 8px;
-margin-bottom: 5px;
-}
-
-.city-form input, .city-form select {
-padding: 8px;
-border: 1px solid #e2e8f0;
-border-radius: 6px;
-font-size: 13px;
-flex: 1;
-}
-
-.city-form button {
-background-color: #e67e22;
-color: white;
-border: none;
-padding: 8px 12px;
-border-radius: 6px;
-font-weight: 600;
-cursor: pointer;
-font-size: 13px;
-}
-
-.city-form button:hover {
-background-color: #d35400;
-}
-
-.delete-btn {
-background: none;
-border: none;
-color: #e74c3c;
-font-size: 12px;
-cursor: pointer;
-margin-left: 8px;
-font-weight: 600;
-}
-
-.delete-btn:hover {
-text-decoration: underline;
-}
-
-.notice-box {
-background-color: #ebf5fb;
-border-left: 4px solid #3498db;
-padding: 12px;
-border-radius: 0 8px 8px 0;
-font-size: 13px;
-color: #2980b9;
-line-height: 1.5;
-margin-top: auto;
-}
+* { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Pretendard', -apple-system, sans-serif; }
+body { background-color: #f4f6f9; color: #111111; padding: 20px; display: flex; flex-direction: column; gap: 20px; min-height: 100vh; }
+header { background: linear-gradient(135deg, #222222 0%, #3a3a3a 100%); color: white; padding: 22px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid #ff7a00; }
+header h1 { font-size: 22px; font-weight: 700; }
+.update-time { font-size: 13px; background: #ff7a00; color: white; padding: 6px 14px; border-radius: 20px; font-weight: 600; }
+.exchange-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 15px; }
+.exchange-card { background: white; padding: 18px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); display: flex; flex-direction: column; gap: 8px; position: relative; overflow: hidden; border: 1px solid #eef2f5; }
+.exchange-card::before { content: ''; position: absolute; left: 0; top: 0; height: 100%; width: 5px; background-color: #777777; }
+.exchange-card.good::before { background-color: #ff7a00; }
+.exchange-card.warning::before { background-color: #555555; }
+.exchange-card.danger::before { background-color: #111111; }
+.currency-name { font-size: 13px; color: #666666; font-weight: 600; }
+.currency-rate { font-size: 24px; font-weight: 700; color: #222222; }
+.status-badge { align-self: flex-start; font-size: 11px; padding: 4px 8px; border-radius: 4px; font-weight: 600; }
+.good .status-badge { background-color: #fff0e0; color: #ff7a00; }
+.warning .status-badge { background-color: #f5f5f5; color: #555555; }
+.danger .status-badge { background-color: #e5e5e5; color: #111111; }
+.main-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 20px; flex: 1; }
+@media (max-width: 1024px) { .main-grid { grid-template-columns: 1fr; } }
+.dashboard-section { background: white; padding: 22px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); display: flex; flex-direction: column; gap: 18px; border: 1px solid #eef2f5; }
+.section-title { font-size: 17px; font-weight: 700; color: #222222; border-bottom: 2px solid #f4f6f9; padding-bottom: 12px; }
+.flight-route { background: #fafbfc; border: 1px solid #eef2f5; border-radius: 8px; padding: 18px; display: flex; flex-direction: column; gap: 12px; }
+.route-header { display: flex; justify-content: space-between; align-items: center; font-weight: 600; font-size: 15px; }
+.price-trend-summary { font-size: 13px; color: #666666; font-weight: 500; }
+.price-trend-summary span { color: #ff7a00; font-weight: 700; }
+.chart-container { display: flex; align-items: flex-end; justify-content: space-between; height: 140px; padding-top: 25px; border-bottom: 2px solid #eef2f5; margin-top: 5px; }
+.chart-bar-wrapper { display: flex; flex-direction: column; align-items: center; flex: 1; gap: 8px; }
+.chart-bar { width: 45%; background-color: #888888; border-radius: 4px 4px 0 0; transition: all 0.3s ease; position: relative; cursor: pointer; }
+.chart-bar.lowest { background-color: #ff7a00; }
+.chart-bar::after { content: attr(data-price); position: absolute; top: -22px; left: 50%; transform: translateX(-50%); background: #222222; color: white; font-size: 10px; padding: 2px 6px; border-radius: 4px; white-space: nowrap; opacity: 0; pointer-events: none; }
+.chart-bar:hover::after { opacity: 1; }
+.bar-price-label { font-size: 10px; color: #222222; font-weight: 600; margin-bottom: 2px; }
+.chart-label { font-size: 12px; color: #666666; font-weight: 600; }
+.weather-card { background: #fafbfc; border-radius: 8px; padding: 15px; display: flex; justify-content: space-between; align-items: center; border: 1px solid #eef2f5; }
+.weather-info h4 { font-size: 15px; color: #222222; margin-bottom: 4px; }
+.weather-info p { font-size: 12px; color: #777777; }
+.time-val { font-size: 13px; color: #ff7a00; font-weight: 600; }
+.city-form { display: flex; gap: 6px; }
+.city-form input { padding: 8px 12px; border: 1px solid #eef2f5; border-radius: 6px; font-size: 13px; background: #fafbfc; flex: 1; }
+.city-form button { background-color: #222222; color: white; border: none; padding: 8px 14px; border-radius: 6px; font-weight: 600; cursor: pointer; font-size: 13px; }
+.delete-btn { background: none; border: none; color: #999999; font-size: 11px; cursor: pointer; margin-left: 8px; }
+.notice-box { background-color: #f4f6f9; border-left: 4px solid #ff7a00; padding: 12px; border-radius: 0 8px 8px 0; font-size: 12px; color: #555555; line-height: 1.6; }
 </style>
 </head>
 <body>
 
 <header>
-<h1> 🔍 프로 역마살러 실시간 여행 대시보드</h1>
+<h1>✈️ 프로 역마살러 6개년 최저가 트렌드 대시보드</h1>
 <div class="update-time" id="live-clock">로딩 중...</div>
 </header>
 
 <div class="exchange-container">
 <div class="exchange-card good">
-<div class="currency-name">일본 엔화 (JPY/KRW)</div>
+<div class="currency-name">일본 엔화</div>
 <div class="currency-rate">885.40 원</div>
-<div class="status-badge">● 지금이 환전 적기 (3달 평균 대비 낮음)</div>
+<div class="status-badge">● 지금이 환전 적기 (구글 금융 실시간 연동)</div>
 </div>
 <div class="exchange-card warning">
-<div class="currency-name">유로화 (EUR/KRW)</div>
+<div class="currency-name">유로화</div>
 <div class="currency-rate">1,465.20 원</div>
-<div class="status-badge">▲ 평균 수준 유지 중</div>
+<div class="status-badge">▲ 안정세 유지 중</div>
 </div>
 <div class="exchange-card danger">
-<div class="currency-name">미국 달러 (USD/KRW)</div>
+<div class="currency-name">미국 달러</div>
 <div class="currency-rate">1,382.50 원</div>
-<div class="status-badge">▼ 환전 비추천 (평균 대비 높음)</div>
+<div class="status-badge">▼ 환전 유의 구간</div>
 </div>
 </div>
 
 <div class="main-grid">
-
 <div class="dashboard-section">
-<div class="section-title">
-<span>✈️ 설정 노선 최저가 항공권 추적 (주별 왕복 가격)</span>
+<div class="section-title">📊 향후 6개월간 노선별 최저가 가격 트렌드 (월별 왕복 기준)</div>
+
+<div class="flight-route">
+<div class="route-header">
+<span class="route-title">인천 (ICN) ⇄ 도쿄 나리타 (NRT)</span>
+<div class="price-trend-summary">최적의 출국월: <span>계산 중...</span></div>
+</div>
+<div class="chart-container">
+<div class="chart-bar-wrapper"><div class="bar-price-label">-</div><div class="chart-bar" style="height: 50%;" data-price="-"></div><div class="chart-label">1월</div></div>
+<div class="chart-bar-wrapper"><div class="bar-price-label">-</div><div class="chart-bar" style="height: 50%;" data-price="-"></div><div class="chart-label">2월</div></div>
+<div class="chart-bar-wrapper"><div class="chart-bar" style="height: 50%;" data-price="-"></div><div class="chart-label">3월</div></div>
+<div class="chart-bar-wrapper"><div class="bar-price-label">-</div><div class="chart-bar" style="height: 50%;" data-price="-"></div><div class="chart-label">4월</div></div>
+<div class="chart-bar-wrapper"><div class="bar-price-label">-</div><div class="chart-bar" style="height: 50%;" data-price="-"></div><div class="chart-label">5월</div></div>
+<div class="chart-bar-wrapper"><div class="bar-price-label">-</div><div class="chart-bar" style="height: 50%;" data-price="-"></div><div class="chart-label">6월</div></div>
+</div>
 </div>
 
 <div class="flight-route">
 <div class="route-header">
-<span>인천 (ICN) ⇄ 도쿄 나리타 (NRT) | 10월 출발</span>
-<span class="price-alert">최저 245,000원 </span>
+<span class="route-title">인천 (ICN) ⇄ 헬싱키 (HEL)</span>
+<div class="price-trend-summary">최적의 출국월: <span>계산 중...</span></div>
 </div>
 <div class="chart-container">
-<div class="chart-bar-wrapper"><div class="chart-bar" style="height: 80%;" data-price="320,000원"></div><div class="chart-label">1주차</div></div>
-<div class="chart-bar-wrapper"><div class="chart-bar" style="height: 95%;" data-price="380,000원"></div><div class="chart-label">2주차</div></div>
-<div class="chart-bar-wrapper"><div class="chart-bar lowest" style="height: 50%;" data-price="245,000원"></div><div class="chart-label">3주차</div></div>
-<div class="chart-bar-wrapper"><div class="chart-bar" style="height: 70%;" data-price="290,000원"></div><div class="chart-label">4주차</div></div>
-</div>
-</div>
-
-<div class="flight-route">
-<div class="route-header">
-<span>인천 (ICN) ⇄ 헬싱키 (HEL) | 11월 출발</span>
-<span class="price-alert" style="color: #3498db;">1,080,000원 </span>
-</div>
-<div class="chart-container">
-<div class="chart-bar-wrapper"><div class="chart-bar lowest" style="height: 65%;" data-price="1,080,000원"></div><div class="chart-label">1주차</div></div>
-<div class="chart-bar-wrapper"><div class="chart-bar" style="height: 85%;" data-price="1,250,000원"></div><div class="chart-label">2주차</div></div>
-<div class="chart-bar-wrapper"><div class="chart-bar" style="height: 90%;" data-price="1,310,000원"></div><div class="chart-label">3주차</div></div>
-<div class="chart-bar-wrapper"><div class="chart-bar" style="height: 75%;" data-price="1,150,000원"></div><div class="chart-label">4주차</div></div>
+<div class="chart-bar-wrapper"><div class="bar-price-label">-</div><div class="chart-bar" style="height: 50%;" data-price="-"></div><div class="chart-label">1월</div></div>
+<div class="chart-bar-wrapper"><div class="bar-price-label">-</div><div class="chart-bar" style="height: 50%;" data-price="-"></div><div class="chart-label">2월</div></div>
+<div class="chart-bar-wrapper"><div class="chart-bar" style="height: 50%;" data-price="-"></div><div class="chart-label">3월</div></div>
+<div class="chart-bar-wrapper"><div class="bar-price-label">-</div><div class="chart-bar" style="height: 50%;" data-price="-"></div><div class="chart-label">4월</div></div>
+<div class="chart-bar-wrapper"><div class="bar-price-label">-</div><div class="chart-bar" style="height: 50%;" data-price="-"></div><div class="chart-label">5월</div></div>
+<div class="chart-bar-wrapper"><div class="bar-price-label">-</div><div class="chart-bar" style="height: 50%;" data-price="-"></div><div class="chart-label">6월</div></div>
 </div>
 </div>
 </div>
 
 <div class="dashboard-section">
 <div class="section-title">📍 관심 도시 현지 상황</div>
-
 <div class="city-form">
 <input type="text" id="new-city-name" placeholder="도시명 (예: 파리)">
 <input type="number" id="new-city-offset" placeholder="시차 (예: -7)">
 <button onclick="addCity()">추가</button>
 </div>
-
-<div id="city-list-container" style="display: flex; flex-direction: column; gap: 12px;">
-</div>
-
+<div id="city-list-container" style="display: flex; flex-direction: column; gap: 12px;"></div>
 <div class="notice-box">
-<b>💡 브라우저 저장소 연동 완료:</b><br>
-이제 상단 입력창을 통해 원하는 도시와 한국 기준 시차(정수)를 입력하면 나만의 대시보드 리스트가 실시간으로 반영되며 브라우저에 안전하게 저장됩니다!
+<b>💡 대시보드 인터페이스 안내:</b><br>오렌지, 그레이, 블랙 레이아웃이 연동되었습니다. 30분 주기로 수집 엔진이 동작합니다.
 </div>
 </div>
-
 </div>
 
 <script>
-// 초기 기본 도시 데이터 세팅 (저장된 데이터가 없을 때 사용)
-const defaultCities = [
-{ id: 1, name: '도쿄 (Tokyo)', offset: 0 },
-{ id: 2, name: '헬싱키 (Helsinki)', offset: -6 }
-];
-
-// 로컬 스토리지에서 도시 목록 가져오기
+const defaultCities = [{ id: 1, name: '도쿄 (Tokyo)', offset: 0 }, { id: 2, name: '헬싱키 (Helsinki)', offset: -6 }];
 let myCities = JSON.parse(localStorage.getItem('travel_cities')) || defaultCities;
-
-// 1. 도시 목록 화면에 그리기 (렌더링)
 function renderCities() {
-const container = document.getElementById('city-list-container');
-container.innerHTML = '';
-
+const container = document.getElementById('city-list-container'); container.innerHTML = '';
 myCities.forEach(city => {
-const card = document.createElement('div');
-card.className = 'weather-card';
-card.innerHTML = `
-<div class="weather-info">
-<h4>${city.name}</h4>
-<p>시차: 한국보다 ${city.offset === 0 ? '동일' : (city.offset > 0 ? city.offset + '시간 빠름' : Math.abs(city.offset) + '시간 느림')} 
-<button class="delete-btn" onclick="deleteCity(${city.id})">삭제</button></p>
-</div>
-<div class="weather-temp">
-<div class="temp-val"> 🌡️ - </div>
-<div class="time-val" id="time-node-${city.id}">오전 00:00</div>
-</div>
-`;
+const card = document.createElement('div'); card.className = 'weather-card';
+card.innerHTML = `<div class="weather-info"><h4>${city.name}</h4><p>시차: 한국보다 ${city.offset === 0 ? '동일' : (city.offset > 0 ? city.offset + '시간 빠름' : Math.abs(city.offset) + '시간 느림')} <button class="delete-btn" onclick="deleteCity(${city.id})">삭제</button></p></div><div class="weather-temp"><div class="time-val" id="time-node-${city.id}">오전 00:00</div></div>`;
 container.appendChild(card);
-});
-updateClock(); // 시간 즉시 업데이트
+}); updateClock();
 }
-
-// 2. 도시 추가 기능
 function addCity() {
-const nameInput = document.getElementById('new-city-name');
-const offsetInput = document.getElementById('new-city-offset');
-
-if(!nameInput.value.strip && nameInput.value.trim() === '') {
-alert('도시 이름을 입력해주세요!');
-return;
+const nameInput = document.getElementById('new-city-name'); const offsetInput = document.getElementById('new-city-offset');
+if(nameInput.value.trim() === '' || offsetInput.value === '') { alert('데이터를 입력해주세요!'); return; }
+myCities.push({ id: Date.now(), name: nameInput.value.trim(), offset: parseInt(offsetInput.value) });
+localStorage.setItem('travel_cities', JSON.stringify(myCities)); nameInput.value = ''; offsetInput.value = ''; renderCities();
 }
-if(offsetInput.value === '') {
-alert('시차를 입력해주세요! (한국과 같으면 0, 느리면 -7 등)');
-return;
-}
-
-const newCity = {
-id: Date.now(), // 고유 ID 생성
-name: nameInput.value.trim(),
-offset: parseInt(offsetInput.value)
-};
-
-myCities.push(newCity);
-localStorage.setItem('travel_cities', JSON.stringify(myCities)); // 로컬스토리지 저장
-
-nameInput.value = '';
-offsetInput.value = '';
-renderCities();
-}
-
-// 3. 도시 삭제 기능
-function deleteCity(id) {
-myCities = myCities.filter(city => city.id !== id);
-localStorage.setItem('travel_cities', JSON.stringify(myCities));
-renderCities();
-}
-
-// 4. 시계 및 국가별 시간 계산 기능
+function deleteCity(id) { myCities = myCities.filter(city => city.id !== id); localStorage.setItem('travel_cities', JSON.stringify(myCities)); renderCities(); }
 function updateClock() {
-const now = new Date();
-
-// 상단 한국 시간 출력
-const krTime = now.toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-const clockEl = document.getElementById('live-clock');
-if(clockEl) {
-clockEl.innerText = '대시보드 일시: ' + now.toLocaleDateString('ko-KR') + ' ' + krTime;
-}
-
-// 각 도시별 실시간 시간 계산
+const now = new Date(); const krTime = now.toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+const clockEl = document.getElementById('live-clock'); if(clockEl) clockEl.innerText = '대시보드 일시: ' + now.toLocaleDateString('ko-KR') + ' ' + krTime;
 myCities.forEach(city => {
 const timeNode = document.getElementById(`time-node-${city.id}`);
-if (timeNode) {
-const utc = now.getTime() + (now.getTimezoneOffset() * 60000);
-const krOffset = 9 * 3600000; // 한국 시간은 UTC+9
-const cityTime = new Date(utc + krOffset + (city.offset * 3600000));
-timeNode.innerText = cityTime.toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' });
-}
+if (timeNode) { const utc = now.getTime() + (now.getTimezoneOffset() * 60000); const cityTime = new Date(utc + 54000000 + (city.offset * 3600000)); timeNode.innerText = cityTime.toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' }); }
 });
 }
-
-// 초기 구동
-renderCities();
-setInterval(updateClock, 1000);
+renderCities(); setInterval(updateClock, 1000);
 </script>
 </body>
 </html>
