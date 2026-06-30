@@ -2,9 +2,9 @@ name: Realtime Travel Dashboard Auto Update
 
 on:
   schedule:
-    # 매일 한국 시간(KST) 오전 9시부터 오후 6시까지 매 시간 정각마다 자동 실행 (주말 제외 평일만)
-    - cron: '0 0-9 * * 1-5'
-  workflow_dispatch: # 수동 실행 버튼
+    # 24시간 동안 매 30분마다 (0분, 30분) 자동으로 실행되도록 설정
+    - cron: '0,30 * * * *'
+  workflow_dispatch: # 언제든 수동으로 즉시 실행할 수 있는 버튼 활성화
 
 jobs:
   update-dashboard:
@@ -13,8 +13,6 @@ jobs:
     steps:
     - name: 저장소 코드 가져오기
       uses: actions/checkout@v4
-      with:
-        # 최신 내부 런타임 호환성을 위해 체크아웃 옵션 유지
 
     - name: 파이썬 환경 설정
       uses: actions/setup-python@v5
