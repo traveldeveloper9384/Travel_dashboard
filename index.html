@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="ko">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>프로 역마살러 실시간 여행 대시보드</title>
-<style>
-* {
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>
+   프로 역마살러 실시간 여행 대시보드
+  </title>
+  <style>
+   * {
 box-sizing: border-box;
 margin: 0;
 padding: 0;
@@ -243,102 +245,191 @@ color: #2980b9;
 line-height: 1.5;
 margin-top: auto;
 }
-</style>
-</head>
-<body>
-
-<header>
-<h1> 프로 역마살러 실시간 여행 대시보드</h1>
-<div class="update-time" id="live-clock">로딩 중...</div>
-</header>
-
-<div class="exchange-container">
-<div class="exchange-card good">
-<div class="currency-name">일본 엔화 (JPY/KRW)</div>
-<div class="currency-rate">885.40 원</div>
-<div class="status-badge">● 지금이 환전 적기 (3달 평균 대비 낮음)</div>
-</div>
-<div class="exchange-card warning">
-<div class="currency-name">유로화 (EUR/KRW)</div>
-<div class="currency-rate">1,465.20 원</div>
-<div class="status-badge">▲ 평균 수준 유지 중</div>
-</div>
-<div class="exchange-card danger">
-<div class="currency-name">미국 달러 (USD/KRW)</div>
-<div class="currency-rate">1,382.50 원</div>
-<div class="status-badge">▼ 환전 비추천 (평균 대비 높음)</div>
-</div>
-</div>
-
-<div class="main-grid">
-
-<div class="dashboard-section">
-<div class="section-title">
-<span> 설정 노선 최저가 항공권 추적 (주별 왕복 가격)</span>
-</div>
-
-<div class="flight-route">
-<div class="route-header">
-<span>인천 (ICN) ⇄ 도쿄 나리타 (NRT) | 10월 출발</span>
-<span class="price-alert">최저 245,000원 </span>
-</div>
-<div class="chart-container">
-<div class="chart-bar-wrapper"><div class="chart-bar" style="height: 80%;" data-price="320,000원"></div><div class="chart-label">1주차</div></div>
-<div class="chart-bar-wrapper"><div class="chart-bar" style="height: 95%;" data-price="380,000원"></div><div class="chart-label">2주차</div></div>
-<div class="chart-bar-wrapper"><div class="chart-bar lowest" style="height: 50%;" data-price="245,000원"></div><div class="chart-label">3주차</div></div>
-<div class="chart-bar-wrapper"><div class="chart-bar" style="height: 70%;" data-price="290,000원"></div><div class="chart-label">4주차</div></div>
-</div>
-</div>
-
-<div class="flight-route">
-<div class="route-header">
-<span>인천 (ICN) ⇄ 헬싱키 (HEL) | 11월 출발</span>
-<span class="price-alert" style="color: #3498db;">1,080,000원 </span>
-</div>
-<div class="chart-container">
-<div class="chart-bar-wrapper"><div class="chart-bar lowest" style="height: 65%;" data-price="1,080,000원"></div><div class="chart-label">1주차</div></div>
-<div class="chart-bar-wrapper"><div class="chart-bar" style="height: 85%;" data-price="1,250,000원"></div><div class="chart-label">2주차</div></div>
-<div class="chart-bar-wrapper"><div class="chart-bar" style="height: 90%;" data-price="1,310,000원"></div><div class="chart-label">3주차</div></div>
-<div class="chart-bar-wrapper"><div class="chart-bar" style="height: 75%;" data-price="1,150,000원"></div><div class="chart-label">4주차</div></div>
-</div>
-</div>
-</div>
-
-<div class="dashboard-section">
-<div class="section-title"> 관심 도시 현지 상황</div>
-
-<div class="weather-card">
-<div class="weather-info">
-<h4>도쿄 (Tokyo)</h4>
-<p>시차: 한국과 동일</p>
-</div>
-<div class="weather-temp">
-<div class="temp-val"> 22°C</div>
-<div class="time-val" id="tokyo-time">오후 00:00</div>
-</div>
-</div>
-
-<div class="weather-card">
-<div class="weather-info">
-<h4>헬싱키 (Helsinki)</h4>
-<p>시차: 한국보다 6시간 느림</p>
-</div>
-<div class="weather-temp">
-<div class="temp-val"> -2°C</div>
-<div class="time-val" id="helsinki-time">오전 00:00</div>
-</div>
-</div>
-
-<div class="notice-box">
-<b> 데이터 자동 업데이트 팁:</b><br>
-현재 가격과 환율은 고정되어 있는 샘플 데이터입니다. 파이썬(BeautifulSoup/Selenium) 크롤링 스크립트를 짜서 주기적으로 데이터를 긁어온 뒤, 이 HTML 파일 안의 숫자 부분만 덮어쓰도록(Overwrite) 자동화해두면 실시간으로 연동되는 나만의 홈 대시보드가 완성됩니다!
-</div>
-</div>
-
-</div>
-
-<script>
-// 대시보드 시계 및 국가별 실시간 시차 계산 기능
+  </style>
+ </head>
+ <body>
+  <header>
+   <h1>
+    &nbsp;프로 역마살러 실시간 여행 대시보드
+   </h1>
+   <div class="update-time" id="live-clock">
+    로딩 중...
+   </div>
+  </header>
+  <div class="exchange-container">
+   <div class="exchange-card good">
+    <div class="currency-name">
+     일본 엔화 (JPY/KRW)
+    </div>
+    <div class="currency-rate">
+     954.84 원
+    </div>
+    <div class="status-badge">
+     ● 지금이 환전 적기 (3달 평균 대비 낮음)
+    </div>
+   </div>
+   <div class="exchange-card warning">
+    <div class="currency-name">
+     유로화 (EUR/KRW)
+    </div>
+    <div class="currency-rate">
+     1,767.57 원
+    </div>
+    <div class="status-badge">
+     ▲ 평균 수준 유지 중
+    </div>
+   </div>
+   <div class="exchange-card danger">
+    <div class="currency-name">
+     미국 달러 (USD/KRW)
+    </div>
+    <div class="currency-rate">
+     1,550.70 원
+    </div>
+    <div class="status-badge">
+     ▼ 환전 비추천 (평균 대비 높음)
+    </div>
+   </div>
+  </div>
+  <div class="main-grid">
+   <div class="dashboard-section">
+    <div class="section-title">
+     <span>
+      &nbsp;설정 노선 최저가 항공권 추적 (주별 왕복 가격)
+     </span>
+    </div>
+    <div class="flight-route">
+     <div class="route-header">
+      <span>
+       인천 (ICN) &rlarr; 도쿄 나리타 (NRT) | 10월 출발
+      </span>
+      <span class="price-alert">
+       최저 245,000원&nbsp;
+      </span>
+     </div>
+     <div class="chart-container">
+      <div class="chart-bar-wrapper">
+       <div class="chart-bar" data-price="320,000원" style="height: 80%;">
+       </div>
+       <div class="chart-label">
+        1주차
+       </div>
+      </div>
+      <div class="chart-bar-wrapper">
+       <div class="chart-bar" data-price="380,000원" style="height: 95%;">
+       </div>
+       <div class="chart-label">
+        2주차
+       </div>
+      </div>
+      <div class="chart-bar-wrapper">
+       <div class="chart-bar lowest" data-price="245,000원" style="height: 50%;">
+       </div>
+       <div class="chart-label">
+        3주차
+       </div>
+      </div>
+      <div class="chart-bar-wrapper">
+       <div class="chart-bar" data-price="290,000원" style="height: 70%;">
+       </div>
+       <div class="chart-label">
+        4주차
+       </div>
+      </div>
+     </div>
+    </div>
+    <div class="flight-route">
+     <div class="route-header">
+      <span>
+       인천 (ICN) &rlarr; 헬싱키 (HEL) | 11월 출발
+      </span>
+      <span class="price-alert" style="color: #3498db;">
+       1,080,000원&nbsp;
+      </span>
+     </div>
+     <div class="chart-container">
+      <div class="chart-bar-wrapper">
+       <div class="chart-bar lowest" data-price="1,080,000원" style="height: 65%;">
+       </div>
+       <div class="chart-label">
+        1주차
+       </div>
+      </div>
+      <div class="chart-bar-wrapper">
+       <div class="chart-bar" data-price="1,250,000원" style="height: 85%;">
+       </div>
+       <div class="chart-label">
+        2주차
+       </div>
+      </div>
+      <div class="chart-bar-wrapper">
+       <div class="chart-bar" data-price="1,310,000원" style="height: 90%;">
+       </div>
+       <div class="chart-label">
+        3주차
+       </div>
+      </div>
+      <div class="chart-bar-wrapper">
+       <div class="chart-bar" data-price="1,150,000원" style="height: 75%;">
+       </div>
+       <div class="chart-label">
+        4주차
+       </div>
+      </div>
+     </div>
+    </div>
+   </div>
+   <div class="dashboard-section">
+    <div class="section-title">
+     &nbsp;관심 도시 현지 상황
+    </div>
+    <div class="weather-card">
+     <div class="weather-info">
+      <h4>
+       도쿄 (Tokyo)
+      </h4>
+      <p>
+       시차: 한국과 동일
+      </p>
+     </div>
+     <div class="weather-temp">
+      <div class="temp-val">
+       &nbsp;22&deg;C
+      </div>
+      <div class="time-val" id="tokyo-time">
+       오후 00:00
+      </div>
+     </div>
+    </div>
+    <div class="weather-card">
+     <div class="weather-info">
+      <h4>
+       헬싱키 (Helsinki)
+      </h4>
+      <p>
+       시차: 한국보다 6시간 느림
+      </p>
+     </div>
+     <div class="weather-temp">
+      <div class="temp-val">
+       &nbsp;-2&deg;C
+      </div>
+      <div class="time-val" id="helsinki-time">
+       오전 00:00
+      </div>
+     </div>
+    </div>
+    <div class="notice-box">
+     <b>
+      &nbsp;데이터 자동 업데이트 팁:
+     </b>
+     <br/>
+     현재 가격과 환율은 고정되어 있는 샘플 데이터입니다. 파이썬(BeautifulSoup/Selenium) 크롤링 스크립트를 짜서 주기적으로 데이터를 긁어온 뒤, 이 HTML 파일 안의 숫자 부분만 덮어쓰도록(Overwrite) 자동화해두면 실시간으로 연동되는 나만의 홈 대시보드가 완성됩니다!
+    </div>
+   </div>
+  </div>
+  <script>
+   // 대시보드 시계 및 국가별 실시간 시차 계산 기능
 function updateClock() {
 const now = new Date();
 
@@ -358,6 +449,6 @@ document.getElementById('helsinki-time').innerText = helsinkiDate.toLocaleTimeSt
 
 setInterval(updateClock, 1000);
 updateClock(); // 초기 실행
-</script>
-</body>
+  </script>
+ </body>
 </html>
