@@ -13,7 +13,7 @@ kst_now = utc_now + datetime.timedelta(hours=9)
 current_hour = kst_now.hour
 
 # 낮 12시인지 판정
-is_flight_update_time = (current_hour == 12)
+is_flight_update_time = True
 
 print(f"⏰ [시간 검증] 현재 한국 시간: {kst_now.strftime('%Y-%m-%d %H:%M:%S')}")
 if not is_flight_update_time:
