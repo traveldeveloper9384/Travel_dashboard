@@ -1,13 +1,11 @@
 <!DOCTYPE html>
 <html lang="ko">
- <head>
-  <meta charset="utf-8"/>
-  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-  <title>
-   프로 역마살러 실시간 여행 대시보드
-  </title>
-  <style>
-   * {
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>프로 역마살러 실시간 여행 대시보드</title>
+<style>
+* {
 box-sizing: border-box;
 margin: 0;
 padding: 0;
@@ -218,6 +216,7 @@ display: flex;
 justify-content: space-between;
 align-items: center;
 border: 1px solid #e2e8f0;
+position: relative;
 }
 
 .weather-info h4 {
@@ -235,6 +234,50 @@ color: #7f8c8d;
 .temp-val { font-size: 22px; font-weight: 700; color: #2c3e50; }
 .time-val { font-size: 13px; color: #e67e22; font-weight: 600; }
 
+/* 도시 추가 폼 스타일 */
+.city-form {
+display: flex;
+gap: 8px;
+margin-bottom: 5px;
+}
+
+.city-form input, .city-form select {
+padding: 8px;
+border: 1px solid #e2e8f0;
+border-radius: 6px;
+font-size: 13px;
+flex: 1;
+}
+
+.city-form button {
+background-color: #e67e22;
+color: white;
+border: none;
+padding: 8px 12px;
+border-radius: 6px;
+font-weight: 600;
+cursor: pointer;
+font-size: 13px;
+}
+
+.city-form button:hover {
+background-color: #d35400;
+}
+
+.delete-btn {
+background: none;
+border: none;
+color: #e74c3c;
+font-size: 12px;
+cursor: pointer;
+margin-left: 8px;
+font-weight: 600;
+}
+
+.delete-btn:hover {
+text-decoration: underline;
+}
+
 .notice-box {
 background-color: #ebf5fb;
 border-left: 4px solid #3498db;
@@ -245,210 +288,182 @@ color: #2980b9;
 line-height: 1.5;
 margin-top: auto;
 }
-  </style>
- </head>
- <body>
-  <header>
-   <h1>
-    &nbsp;프로 역마살러 실시간 여행 대시보드
-   </h1>
-   <div class="update-time" id="live-clock">
-    로딩 중...
-   </div>
-  </header>
-  <div class="exchange-container">
-   <div class="exchange-card good">
-    <div class="currency-name">
-     일본 엔화 (JPY/KRW)
-    </div>
-    <div class="currency-rate">
-     954.84 원
-    </div>
-    <div class="status-badge">
-     ● 지금이 환전 적기 (3달 평균 대비 낮음)
-    </div>
-   </div>
-   <div class="exchange-card warning">
-    <div class="currency-name">
-     유로화 (EUR/KRW)
-    </div>
-    <div class="currency-rate">
-     1,767.57 원
-    </div>
-    <div class="status-badge">
-     ▲ 평균 수준 유지 중
-    </div>
-   </div>
-   <div class="exchange-card danger">
-    <div class="currency-name">
-     미국 달러 (USD/KRW)
-    </div>
-    <div class="currency-rate">
-     1,550.70 원
-    </div>
-    <div class="status-badge">
-     ▼ 환전 비추천 (평균 대비 높음)
-    </div>
-   </div>
-  </div>
-  <div class="main-grid">
-   <div class="dashboard-section">
-    <div class="section-title">
-     <span>
-      &nbsp;설정 노선 최저가 항공권 추적 (주별 왕복 가격)
-     </span>
-    </div>
-    <div class="flight-route">
-     <div class="route-header">
-      <span>
-       인천 (ICN) &rlarr; 도쿄 나리타 (NRT) | 10월 출발
-      </span>
-      <span class="price-alert">
-       최저 245,000원&nbsp;
-      </span>
-     </div>
-     <div class="chart-container">
-      <div class="chart-bar-wrapper">
-       <div class="chart-bar" data-price="320,000원" style="height: 80%;">
-       </div>
-       <div class="chart-label">
-        1주차
-       </div>
-      </div>
-      <div class="chart-bar-wrapper">
-       <div class="chart-bar" data-price="380,000원" style="height: 95%;">
-       </div>
-       <div class="chart-label">
-        2주차
-       </div>
-      </div>
-      <div class="chart-bar-wrapper">
-       <div class="chart-bar lowest" data-price="245,000원" style="height: 50%;">
-       </div>
-       <div class="chart-label">
-        3주차
-       </div>
-      </div>
-      <div class="chart-bar-wrapper">
-       <div class="chart-bar" data-price="290,000원" style="height: 70%;">
-       </div>
-       <div class="chart-label">
-        4주차
-       </div>
-      </div>
-     </div>
-    </div>
-    <div class="flight-route">
-     <div class="route-header">
-      <span>
-       인천 (ICN) &rlarr; 헬싱키 (HEL) | 11월 출발
-      </span>
-      <span class="price-alert" style="color: #3498db;">
-       1,080,000원&nbsp;
-      </span>
-     </div>
-     <div class="chart-container">
-      <div class="chart-bar-wrapper">
-       <div class="chart-bar lowest" data-price="1,080,000원" style="height: 65%;">
-       </div>
-       <div class="chart-label">
-        1주차
-       </div>
-      </div>
-      <div class="chart-bar-wrapper">
-       <div class="chart-bar" data-price="1,250,000원" style="height: 85%;">
-       </div>
-       <div class="chart-label">
-        2주차
-       </div>
-      </div>
-      <div class="chart-bar-wrapper">
-       <div class="chart-bar" data-price="1,310,000원" style="height: 90%;">
-       </div>
-       <div class="chart-label">
-        3주차
-       </div>
-      </div>
-      <div class="chart-bar-wrapper">
-       <div class="chart-bar" data-price="1,150,000원" style="height: 75%;">
-       </div>
-       <div class="chart-label">
-        4주차
-       </div>
-      </div>
-     </div>
-    </div>
-   </div>
-   <div class="dashboard-section">
-    <div class="section-title">
-     &nbsp;관심 도시 현지 상황
-    </div>
-    <div class="weather-card">
-     <div class="weather-info">
-      <h4>
-       도쿄 (Tokyo)
-      </h4>
-      <p>
-       시차: 한국과 동일
-      </p>
-     </div>
-     <div class="weather-temp">
-      <div class="temp-val">
-       &nbsp;22&deg;C
-      </div>
-      <div class="time-val" id="tokyo-time">
-       오후 00:00
-      </div>
-     </div>
-    </div>
-    <div class="weather-card">
-     <div class="weather-info">
-      <h4>
-       헬싱키 (Helsinki)
-      </h4>
-      <p>
-       시차: 한국보다 6시간 느림
-      </p>
-     </div>
-     <div class="weather-temp">
-      <div class="temp-val">
-       &nbsp;-2&deg;C
-      </div>
-      <div class="time-val" id="helsinki-time">
-       오전 00:00
-      </div>
-     </div>
-    </div>
-    <div class="notice-box">
-     <b>
-      &nbsp;데이터 자동 업데이트 팁:
-     </b>
-     <br/>
-     현재 가격과 환율은 고정되어 있는 샘플 데이터입니다. 파이썬(BeautifulSoup/Selenium) 크롤링 스크립트를 짜서 주기적으로 데이터를 긁어온 뒤, 이 HTML 파일 안의 숫자 부분만 덮어쓰도록(Overwrite) 자동화해두면 실시간으로 연동되는 나만의 홈 대시보드가 완성됩니다!
-    </div>
-   </div>
-  </div>
-  <script>
-   // 대시보드 시계 및 국가별 실시간 시차 계산 기능
+</style>
+</head>
+<body>
+
+<header>
+<h1> 🔍 프로 역마살러 실시간 여행 대시보드</h1>
+<div class="update-time" id="live-clock">로딩 중...</div>
+</header>
+
+<div class="exchange-container">
+<div class="exchange-card good">
+<div class="currency-name">일본 엔화 (JPY/KRW)</div>
+<div class="currency-rate">885.40 원</div>
+<div class="status-badge">● 지금이 환전 적기 (3달 평균 대비 낮음)</div>
+</div>
+<div class="exchange-card warning">
+<div class="currency-name">유로화 (EUR/KRW)</div>
+<div class="currency-rate">1,465.20 원</div>
+<div class="status-badge">▲ 평균 수준 유지 중</div>
+</div>
+<div class="exchange-card danger">
+<div class="currency-name">미국 달러 (USD/KRW)</div>
+<div class="currency-rate">1,382.50 원</div>
+<div class="status-badge">▼ 환전 비추천 (평균 대비 높음)</div>
+</div>
+</div>
+
+<div class="main-grid">
+
+<div class="dashboard-section">
+<div class="section-title">
+<span>✈️ 설정 노선 최저가 항공권 추적 (주별 왕복 가격)</span>
+</div>
+
+<div class="flight-route">
+<div class="route-header">
+<span>인천 (ICN) ⇄ 도쿄 나리타 (NRT) | 10월 출발</span>
+<span class="price-alert">최저 245,000원 </span>
+</div>
+<div class="chart-container">
+<div class="chart-bar-wrapper"><div class="chart-bar" style="height: 80%;" data-price="320,000원"></div><div class="chart-label">1주차</div></div>
+<div class="chart-bar-wrapper"><div class="chart-bar" style="height: 95%;" data-price="380,000원"></div><div class="chart-label">2주차</div></div>
+<div class="chart-bar-wrapper"><div class="chart-bar lowest" style="height: 50%;" data-price="245,000원"></div><div class="chart-label">3주차</div></div>
+<div class="chart-bar-wrapper"><div class="chart-bar" style="height: 70%;" data-price="290,000원"></div><div class="chart-label">4주차</div></div>
+</div>
+</div>
+
+<div class="flight-route">
+<div class="route-header">
+<span>인천 (ICN) ⇄ 헬싱키 (HEL) | 11월 출발</span>
+<span class="price-alert" style="color: #3498db;">1,080,000원 </span>
+</div>
+<div class="chart-container">
+<div class="chart-bar-wrapper"><div class="chart-bar lowest" style="height: 65%;" data-price="1,080,000원"></div><div class="chart-label">1주차</div></div>
+<div class="chart-bar-wrapper"><div class="chart-bar" style="height: 85%;" data-price="1,250,000원"></div><div class="chart-label">2주차</div></div>
+<div class="chart-bar-wrapper"><div class="chart-bar" style="height: 90%;" data-price="1,310,000원"></div><div class="chart-label">3주차</div></div>
+<div class="chart-bar-wrapper"><div class="chart-bar" style="height: 75%;" data-price="1,150,000원"></div><div class="chart-label">4주차</div></div>
+</div>
+</div>
+</div>
+
+<div class="dashboard-section">
+<div class="section-title">📍 관심 도시 현지 상황</div>
+
+<div class="city-form">
+<input type="text" id="new-city-name" placeholder="도시명 (예: 파리)">
+<input type="number" id="new-city-offset" placeholder="시차 (예: -7)">
+<button onclick="addCity()">추가</button>
+</div>
+
+<div id="city-list-container" style="display: flex; flex-direction: column; gap: 12px;">
+</div>
+
+<div class="notice-box">
+<b>💡 브라우저 저장소 연동 완료:</b><br>
+이제 상단 입력창을 통해 원하는 도시와 한국 기준 시차(정수)를 입력하면 나만의 대시보드 리스트가 실시간으로 반영되며 브라우저에 안전하게 저장됩니다!
+</div>
+</div>
+
+</div>
+
+<script>
+// 초기 기본 도시 데이터 세팅 (저장된 데이터가 없을 때 사용)
+const defaultCities = [
+{ id: 1, name: '도쿄 (Tokyo)', offset: 0 },
+{ id: 2, name: '헬싱키 (Helsinki)', offset: -6 }
+];
+
+// 로컬 스토리지에서 도시 목록 가져오기
+let myCities = JSON.parse(localStorage.getItem('travel_cities')) || defaultCities;
+
+// 1. 도시 목록 화면에 그리기 (렌더링)
+function renderCities() {
+const container = document.getElementById('city-list-container');
+container.innerHTML = '';
+
+myCities.forEach(city => {
+const card = document.createElement('div');
+card.className = 'weather-card';
+card.innerHTML = `
+<div class="weather-info">
+<h4>${city.name}</h4>
+<p>시차: 한국보다 ${city.offset === 0 ? '동일' : (city.offset > 0 ? city.offset + '시간 빠름' : Math.abs(city.offset) + '시간 느림')} 
+<button class="delete-btn" onclick="deleteCity(${city.id})">삭제</button></p>
+</div>
+<div class="weather-temp">
+<div class="temp-val"> 🌡️ - </div>
+<div class="time-val" id="time-node-${city.id}">오전 00:00</div>
+</div>
+`;
+container.appendChild(card);
+});
+updateClock(); // 시간 즉시 업데이트
+}
+
+// 2. 도시 추가 기능
+function addCity() {
+const nameInput = document.getElementById('new-city-name');
+const offsetInput = document.getElementById('new-city-offset');
+
+if(!nameInput.value.strip && nameInput.value.trim() === '') {
+alert('도시 이름을 입력해주세요!');
+return;
+}
+if(offsetInput.value === '') {
+alert('시차를 입력해주세요! (한국과 같으면 0, 느리면 -7 등)');
+return;
+}
+
+const newCity = {
+id: Date.now(), // 고유 ID 생성
+name: nameInput.value.trim(),
+offset: parseInt(offsetInput.value)
+};
+
+myCities.push(newCity);
+localStorage.setItem('travel_cities', JSON.stringify(myCities)); // 로컬스토리지 저장
+
+nameInput.value = '';
+offsetInput.value = '';
+renderCities();
+}
+
+// 3. 도시 삭제 기능
+function deleteCity(id) {
+myCities = myCities.filter(city => city.id !== id);
+localStorage.setItem('travel_cities', JSON.stringify(myCities));
+renderCities();
+}
+
+// 4. 시계 및 국가별 시간 계산 기능
 function updateClock() {
 const now = new Date();
 
 // 상단 한국 시간 출력
 const krTime = now.toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-document.getElementById('live-clock').innerText = '대시보드 일시: ' + now.toLocaleDateString('ko-KR') + ' ' + krTime;
-
-// 도쿄 시간 (한국과 시차 없음)
-document.getElementById('tokyo-time').innerText = now.toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' });
-
-// 헬싱키 시간 (한국 기준 서머타임 미적용 시 7시간, 적용 시 6시간 느림 - 여기선 6시간 기준 계산)
-const helsinkiOffset = -6;
-const utc = now.getTime() + (now.getTimezoneOffset() * 60000);
-const helsinkiDate = new Date(utc + (3600000 * 9) + (3600000 * helsinkiOffset));
-document.getElementById('helsinki-time').innerText = helsinkiDate.toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' });
+const clockEl = document.getElementById('live-clock');
+if(clockEl) {
+clockEl.innerText = '대시보드 일시: ' + now.toLocaleDateString('ko-KR') + ' ' + krTime;
 }
 
+// 각 도시별 실시간 시간 계산
+myCities.forEach(city => {
+const timeNode = document.getElementById(`time-node-${city.id}`);
+if (timeNode) {
+const utc = now.getTime() + (now.getTimezoneOffset() * 60000);
+const krOffset = 9 * 3600000; // 한국 시간은 UTC+9
+const cityTime = new Date(utc + krOffset + (city.offset * 3600000));
+timeNode.innerText = cityTime.toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' });
+}
+});
+}
+
+// 초기 구동
+renderCities();
 setInterval(updateClock, 1000);
-updateClock(); // 초기 실행
-  </script>
- </body>
+</script>
+</body>
 </html>
