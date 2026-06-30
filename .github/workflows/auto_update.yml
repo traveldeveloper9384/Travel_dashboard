@@ -27,6 +27,9 @@ jobs:
     - name: 환율 크롤링 및 index.html 업데이트 실행
       run: |
         python update_dashboard.py
+      env:
+        # 새로 만든 RapidAPI 비밀키를 파이썬과 완벽히 바인딩합니다.
+        RAPIDAPI_KEY: ${{ secrets.RAPIDAPI_KEY }}
 
     - name: 변경된 index.html을 GitHub 저장소에 다시 반영 (Push)
       run: |
